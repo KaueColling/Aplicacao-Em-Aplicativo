@@ -1,0 +1,7 @@
+[x] baixar uma biblioteca externa
+    npm i react-navigation/native
+    npm i react react-navigation/native-stack
+[x] usar rotas para navegação
+    fazer igual a documentação do react navigation
+[x] salvar e buscar itens na memória do celular
+    npm i @react-native-async-storage/async-storage@1.18.2
