@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Aplicativo-de-Lista",
-    "slug": "Aplicativo-de-Lista",
+    "name": "testes",
+    "slug": "testes",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
