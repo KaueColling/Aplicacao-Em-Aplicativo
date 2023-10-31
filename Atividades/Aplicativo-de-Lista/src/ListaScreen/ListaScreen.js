@@ -1,27 +1,18 @@
-import React, { useState, useEffect } from "react";
+// ListaScreen.js
+import React, { useState } from "react";
 import { View, Text, Button, TextInput } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function ListaScreen({ navigation }) {
+function ListaScreen({ route, navigation }) {
   const [newListName, setNewListName] = useState("");
-  const [lists, setLists] = useState([]);
 
-  const addList = async () => {
+  const { onAddList } = route.params;
+
+  const addList = () => {
     if (newListName) {
-      // Salvar a nova lista no AsyncStorage
-      const updatedLists = [...lists, newListName];
-      await AsyncStorage.setItem("lists", JSON.stringify(updatedLists));
-
-      // Atualizar o estado com a nova lista
-      setLists(updatedLists);
-
-      // Limpar o campo de entrada
-      setNewListName("");
-
-      // Passar as listas atualizadas como parâmetro ao navegar de volta
-      navigation.navigate("HomeScreen", { lists: updatedLists });
+      onAddList(newListName);
+      navigation.goBack();
     }
-  }
+  };
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -32,9 +23,6 @@ function ListaScreen({ navigation }) {
         onChangeText={(text) => setNewListName(text)}
       />
       <Button title="Adicionar Lista" onPress={addList} />
-      {lists.map((list, index) => (
-        <Text key={index}>{list}</Text>
-      ))}
     </View>
   );
 }
