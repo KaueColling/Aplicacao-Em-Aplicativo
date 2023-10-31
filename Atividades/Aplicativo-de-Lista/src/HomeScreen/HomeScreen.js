@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, TouchableOpacity, TextInput } from "react-native"; // Adicione a importação do TextInput
+import { View, Text, Button, TouchableOpacity, TextInput } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function HomeScreen({ navigation }) {
   const [lists, setLists] = useState([]);
   const [listToEdit, setListToEdit] = useState(null); // Para rastrear a lista sendo editada
+  const [editedListName, setEditedListName] = useState(""); // Para rastrear o nome editado
 
   useEffect(() => {
     async function loadLists() {
@@ -31,13 +32,24 @@ function HomeScreen({ navigation }) {
     }
   };
 
-  const editList = (id, newName) => {
-    const updatedLists = lists.map((list) =>
-      list.id === id ? { ...list, name: newName } : list
-    );
-    setLists(updatedLists);
-    saveListsToStorage(updatedLists);
-    setListToEdit(null);
+  const editList = (id) => {
+    setListToEdit(id);
+    const listToEdit = lists.find((list) => list.id === id);
+    if (listToEdit) {
+      setEditedListName(listToEdit.name);
+    }
+  };
+
+  const saveEditedList = () => {
+    if (listToEdit !== null && editedListName.trim() !== "") {
+      const updatedLists = lists.map((list) =>
+        list.id === listToEdit ? { ...list, name: editedListName } : list
+      );
+      setLists(updatedLists);
+      saveListsToStorage(updatedLists);
+      setListToEdit(null);
+      setEditedListName("");
+    }
   };
 
   const deleteList = (id) => {
@@ -70,15 +82,15 @@ function HomeScreen({ navigation }) {
           {listToEdit === list.id ? (
             <View>
               <TextInput
-                value={list.name}
-                onChangeText={(text) => editList(list.id, text)}
+                value={editedListName}
+                onChangeText={(text) => setEditedListName(text)}
               />
-              <Button title="Save" onPress={() => setListToEdit(null)} />
+              <Button title="Save" onPress={saveEditedList} />
             </View>
           ) : (
             <Text>{list.name}</Text>
           )}
-          <TouchableOpacity onPress={() => setListToEdit(list.id)}>
+          <TouchableOpacity onPress={() => editList(list.id)}>
             <Text>Edit</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => deleteList(list.id)}>
