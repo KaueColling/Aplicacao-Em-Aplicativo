@@ -1,5 +1,3 @@
-// ListaScreen.js
-
 import React, { useState } from "react";
 import { View, Text, Button, TextInput } from "react-native";
 

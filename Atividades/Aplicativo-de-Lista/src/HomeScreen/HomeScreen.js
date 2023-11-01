@@ -1,8 +1,6 @@
-// HomeScreen.js
-
 // Importações necessárias do React e componentes do React Native.
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, TouchableOpacity, TextInput } from "react-native";
+import { StyleSheet, View, Text, Button, TouchableOpacity, TextInput } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Componente funcional "HomeScreen" que representa a tela principal da aplicação.
@@ -88,8 +86,9 @@ function HomeScreen({ navigation }) {
   // Renderiza a interface da tela HomeScreen.
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Home Screen</Text>
+      <Text style={styles.texto}>Home Screen</Text>
       <Button
+      style={styles.texto}
         title="Add List"
         onPress={() => {
           navigation.navigate("ListaScreen", {
@@ -108,18 +107,56 @@ function HomeScreen({ navigation }) {
               <Button title="Save" onPress={() => saveEditedList(list.id, editedListName)} />
             </View>
           ) : (
-            <Text>{list.name}</Text>
+            <Text style={styles.listaNome} >{list.name}</Text>
           )}
-          <TouchableOpacity onPress={() => editList(list.id)}>
-            <Text>Edit</Text>
+          <TouchableOpacity style={styles.editarBotao} onPress={() => editList(list.id)}>
+            <Text style={styles.textoBotao}>Edit</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => deleteList(list.id)}>
-            <Text>Delete</Text>
+          <TouchableOpacity style={styles.excluirBotao} onPress={() => deleteList(list.id)}>
+            <Text style={styles.textoBotao}>Delete</Text>
           </TouchableOpacity>
         </View>
       ))}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+    editarBotao: {
+      marginLeft: 16,
+      marginTop: 20,
+      marginRight: 16,
+      backgroundColor: "#453831",
+      paddingLeft: 15,
+      paddingRight: 15,
+      paddingTop: 5,
+      paddingBottom: 5,
+      borderRadius: 10,
+    },
+
+    excluirBotao: {
+        marginTop: 20,
+        backgroundColor: "#453831",
+      paddingLeft: 15,
+      paddingRight: 15,
+      paddingTop: 5,
+      paddingBottom: 5,
+      borderRadius: 10,
+    },
+
+    textoBotao: {
+        fontSize: 20,
+        color: "#fffafa",
+    },
+
+    texto: {
+        fontSize: 20,
+    },
+
+    listaNome: {
+        fontSize: 20,
+        marginTop: 20,
+    }
+  });
 
 export default HomeScreen; // Exporta o componente HomeScreen para uso em outras partes da aplicação.
