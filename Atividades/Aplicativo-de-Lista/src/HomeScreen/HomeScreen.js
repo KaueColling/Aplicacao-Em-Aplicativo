@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
 
     excluirBotao: {
         marginTop: 20,
-        backgroundColor: "#453831",
+        backgroundColor: "#BB0000",
       paddingLeft: 15,
       paddingRight: 15,
       paddingTop: 5,
