@@ -2,17 +2,22 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Button, TouchableOpacity, TextInput } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+// O componente Home representa a tela inicial da aplicação.
 function Home({ navigation }) {
+  // Define estados para armazenar informações e interações do usuário.
   const [list, setList] = useState([]);
   const [lists, setLists] = useState([]);
   const [listToEdit, setListToEdit] = useState(null);
   const [editedListName, setEditedListName] = useState("");
 
+  // Efeito colateral para carregar as listas armazenadas no AsyncStorage durante a inicialização.
   useEffect(() => {
     async function loadLists() {
       try {
+        // Tenta recuperar as listas salvas no AsyncStorage com a chave "lists".
         const savedLists = await AsyncStorage.getItem("lists");
         if (savedLists) {
+          // Se as listas forem encontradas, elas são analisadas e definidas como estado.
           const parsedLists = JSON.parse(savedLists);
           setLists(parsedLists);
         }
@@ -21,14 +26,19 @@ function Home({ navigation }) {
       }
     }
 
+    // Chama a função para carregar listas durante a inicialização.
     loadLists();
   }, []);
 
+  // Função para adicionar uma nova lista.
   const addList = (newListName) => {
     if (newListName) {
+      // Cria uma nova lista com um ID único com base na data atual.
       const newList = { id: Date.now(), name: newListName };
+      // Atualiza o estado das listas incluindo a nova lista.
       const updatedLists = [...lists, newList];
       setLists(updatedLists);
+      // Salva as listas atualizadas no AsyncStorage.
       saveListsToStorage(updatedLists);
     }
   }
@@ -43,11 +53,11 @@ function Home({ navigation }) {
     });
   };
 
+  // Função para navegar para a tela "ItemScreenList" passando informações relevantes.
   const ItemList = (id) => {
-    // Navega para a tela "ItemScreenList" passando informações relevantes, incluindo a lista.
     navigation.navigate("ItemList", {
       listId: id,
-      list: list, // Passe a lista como um parâmetro.
+      list: list, // Passa a lista como um parâmetro.
       onEditList: saveEditedList,
     });
   };
@@ -59,10 +69,13 @@ function Home({ navigation }) {
       const updatedLists = lists.map((list) =>
         list.id === listId ? { ...list, name: newName } : list
       );
-      setLists(updatedLists); // Atualiza o estado com as listas editadas.
-      saveListsToStorage(updatedLists); // Salva as listas atualizadas no AsyncStorage.
-      setListToEdit(null); // Limpa a lista sendo editada.
-      setEditedListName(""); // Limpa o nome editado da lista.
+      // Atualiza o estado com as listas editadas.
+      setLists(updatedLists);
+      // Salva as listas atualizadas no AsyncStorage.
+      saveListsToStorage(updatedLists);
+      // Limpa a lista sendo editada e o nome editado da lista.
+      setListToEdit(null);
+      setEditedListName("");
     }
   };
 
@@ -70,15 +83,17 @@ function Home({ navigation }) {
   const deleteList = (id) => {
     // Filtra a lista a ser excluída da lista de listas.
     const updatedLists = lists.filter((list) => list.id !== id);
-    setLists(updatedLists); // Atualiza o estado com a lista excluída.
-    saveListsToStorage(updatedLists); // Salva as listas atualizadas no AsyncStorage.
+    // Atualiza o estado com a lista excluída.
+    setLists(updatedLists);
+    // Salva as listas atualizadas no AsyncStorage.
+    saveListsToStorage(updatedLists);
   };
 
   // Função para salvar as listas no AsyncStorage.
   const saveListsToStorage = async (listsToSave) => {
     try {
-      // Converte e salva as listas em formato JSON no AsyncStorage.
-      await AsyncStorage.setItem("lists", JSON.stringify(listsToSave));
+      // Converte e salva as listas em formato JSON no AsyncStorage com a chave "lists".
+      await AsyncStorage.setItem("lists", JSON.stringify(listsToSave))
     } catch (error) {
       console.error("Error saving lists: ", error);
     }
@@ -86,35 +101,55 @@ function Home({ navigation }) {
 
   // Renderiza a interface da tela HomeScreen.
   return (
+    // Renderiza a tela inicial da aplicação.
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      
+      {/* Exibe um título na tela, indicando que é a Home Screen. */}
       <Text style={styles.texto}>Home Screen</Text>
+
+      {/* Renderiza um botão "Add List" que permite a navegação para a tela de adição de lista. */}
       <Button
-      style={styles.texto}
         title="Add List"
         onPress={() => {
+
+          // Navega para a tela "AddList" passando a função para adicionar lista.
           navigation.navigate("AddList", {
-            onAddList: addList, // Passa a função para adicionar lista à tela de adição de lista.
+            onAddList: addList, // Função para adicionar uma nova lista.
           });
         }}
       />
+
+      {/* Mapeia e renderiza as listas existentes na interface. */}
       {lists.map((list) => (
         <View key={list.id} style={{ flexDirection: "row", alignItems: "center" }}>
+
+          {/* Verifica se uma lista está sendo editada. */}
           {listToEdit === list.id ? (
             <View>
+
+              {/* Exibe um campo de entrada para editar o nome da lista. */}
               <TextInput
                 value={editedListName}
                 onChangeText={(text) => setEditedListName(text)}
               />
+
+              {/* Renderiza um botão "Save" para salvar as edições na lista. */}
               <Button title="Save" onPress={() => saveEditedList(list.id, editedListName)} />
             </View>
           ) : (
             <TouchableOpacity style={styles.editarNameList} onPress={() => ItemList(list.id)}>
-            <Text style={styles.editarNameList}>{list.name}</Text>
+
+              {/* Exibe o nome da lista como um link clicável para acessar a lista de itens. */}
+              <Text style={styles.editarNameList}>{list.name}</Text>
             </TouchableOpacity>
           )}
+
+          {/* Renderiza um botão "Edit" para editar a lista. */}
           <TouchableOpacity style={styles.editarBotao} onPress={() => editList(list.id)}>
             <Text style={styles.textoBotao}>Edit</Text>
           </TouchableOpacity>
+
+          {/* Renderiza um botão "Delete" para excluir a lista. */}
           <TouchableOpacity style={styles.excluirBotao} onPress={() => deleteList(list.id)}>
             <Text style={styles.textoBotao}>Delete</Text>
           </TouchableOpacity>
@@ -125,41 +160,41 @@ function Home({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    editarBotao: {
-      marginLeft: 16,
-      marginTop: 20,
-      marginRight: 16,
-      backgroundColor: "#453831",
-      paddingLeft: 15,
-      paddingRight: 15,
-      paddingTop: 5,
-      paddingBottom: 5,
-      borderRadius: 10,
-    },
+  editarBotao: {
+    marginLeft: 16,
+    marginTop: 20,
+    marginRight: 16,
+    backgroundColor: "#453831",
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderRadius: 10,
+  },
 
-    excluirBotao: {
-        marginTop: 20,
-        backgroundColor: "#BB0000",
-      paddingLeft: 15,
-      paddingRight: 15,
-      paddingTop: 5,
-      paddingBottom: 5,
-      borderRadius: 10,
-    },
+  excluirBotao: {
+    marginTop: 20,
+    backgroundColor: "#BB0000",
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderRadius: 10,
+  },
 
-    textoBotao: {
-        fontSize: 20,
-        color: "#fffafa",
-    },
+  textoBotao: {
+    fontSize: 20,
+    color: "#fffafa",
+  },
 
-    texto: {
-        fontSize: 20,
-    },
+  texto: {
+    fontSize: 20,
+  },
 
-    listaNome: {
-        fontSize: 20,
-        marginTop: 20,
-    }
-  });
+  listaNome: {
+    fontSize: 20,
+    marginTop: 20,
+  }
+});
 
 export default Home; // Exporta o componente HomeScreen para uso em outras partes da aplicação.

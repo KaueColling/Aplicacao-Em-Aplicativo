@@ -21,6 +21,7 @@ function EditList({ route, navigation }) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text>Edit List</Text>
+      
       {/* Componente TextInput permite a edição do nome da lista. */}
       <TextInput
         placeholder="New List Name"
