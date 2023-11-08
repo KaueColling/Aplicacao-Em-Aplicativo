@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, Button, TextInput } from "react-native";
 
 // Componente ListaScreen
-function ListaScreen({ route, navigation }) {
+function AddList({ route, navigation }) {
   // Estado local para rastrear o nome da nova lista
   const [newListName, setNewListName] = useState("");
 
@@ -40,4 +40,4 @@ function ListaScreen({ route, navigation }) {
 }
 
 // Exporta o componente ListaScreen para ser usado em outras partes do aplicativo
-export default ListaScreen;
+export default AddList;

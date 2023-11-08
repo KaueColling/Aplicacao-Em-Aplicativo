@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { View, Text, Button, TextInput } from "react-native";
 
-function EditListScreen({ route, navigation }) {
+function EditList({ route, navigation }) {
   // Desestruturação das propriedades do objeto 'route' e atribuição a variáveis.
   const { listId, editedListName, onEditList } = route.params;
 
@@ -34,4 +34,4 @@ function EditListScreen({ route, navigation }) {
   );
 }
 
-export default EditListScreen;
+export default EditList;

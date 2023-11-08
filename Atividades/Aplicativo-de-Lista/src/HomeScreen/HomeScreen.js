@@ -1,24 +1,18 @@
-// Importações necessárias do React e componentes do React Native.
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Button, TouchableOpacity, TextInput } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Componente funcional "HomeScreen" que representa a tela principal da aplicação.
-function HomeScreen({ navigation }) {
-  // Estado para armazenar a lista de listas, lista atualmente em edição e nome editado.
+function Home({ navigation }) {
+  const [list, setList] = useState([]);
   const [lists, setLists] = useState([]);
   const [listToEdit, setListToEdit] = useState(null);
   const [editedListName, setEditedListName] = useState("");
 
-  // Efeito que carrega as listas salvas no AsyncStorage ao iniciar a tela.
   useEffect(() => {
-    // Função assíncrona para carregar as listas.
     async function loadLists() {
       try {
-        // Tenta obter as listas salvas no AsyncStorage.
         const savedLists = await AsyncStorage.getItem("lists");
         if (savedLists) {
-          // Se listas foram encontradas, as analisa em formato JSON e atualiza o estado.
           const parsedLists = JSON.parse(savedLists);
           setLists(parsedLists);
         }
@@ -27,27 +21,34 @@ function HomeScreen({ navigation }) {
       }
     }
 
-    loadLists(); // Chama a função para carregar as listas ao montar a tela.
+    loadLists();
   }, []);
 
-  // Função para adicionar uma nova lista à tela HomeScreen.
   const addList = (newListName) => {
     if (newListName) {
-      // Cria um objeto de lista com um ID único baseado no horário atual.
       const newList = { id: Date.now(), name: newListName };
-      const updatedLists = [...lists, newList]; // Adiciona a nova lista à lista existente.
-      setLists(updatedLists); // Atualiza o estado com a nova lista.
-      saveListsToStorage(updatedLists); // Salva as listas atualizadas no AsyncStorage.
+      const updatedLists = [...lists, newList];
+      setLists(updatedLists);
+      saveListsToStorage(updatedLists);
     }
-  };
+  }
 
   // Função para editar uma lista.
   const editList = (id) => {
     // Navega para a tela "EditListScreen" passando informações relevantes.
-    navigation.navigate("EditListScreen", {
+    navigation.navigate("EditList", {
       listId: id,
       editedListName: editedListName,
       onEditList: saveEditedList, // Passa a função para salvar a lista editada.
+    });
+  };
+
+  const ItemList = (id) => {
+    // Navega para a tela "ItemScreenList" passando informações relevantes, incluindo a lista.
+    navigation.navigate("ItemList", {
+      listId: id,
+      list: list, // Passe a lista como um parâmetro.
+      onEditList: saveEditedList,
     });
   };
 
@@ -91,7 +92,7 @@ function HomeScreen({ navigation }) {
       style={styles.texto}
         title="Add List"
         onPress={() => {
-          navigation.navigate("ListaScreen", {
+          navigation.navigate("AddList", {
             onAddList: addList, // Passa a função para adicionar lista à tela de adição de lista.
           });
         }}
@@ -107,7 +108,9 @@ function HomeScreen({ navigation }) {
               <Button title="Save" onPress={() => saveEditedList(list.id, editedListName)} />
             </View>
           ) : (
-            <Text style={styles.listaNome} >{list.name}</Text>
+            <TouchableOpacity style={styles.editarNameList} onPress={() => ItemList(list.id)}>
+            <Text style={styles.editarNameList}>{list.name}</Text>
+            </TouchableOpacity>
           )}
           <TouchableOpacity style={styles.editarBotao} onPress={() => editList(list.id)}>
             <Text style={styles.textoBotao}>Edit</Text>
@@ -159,4 +162,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default HomeScreen; // Exporta o componente HomeScreen para uso em outras partes da aplicação.
+export default Home; // Exporta o componente HomeScreen para uso em outras partes da aplicação.
