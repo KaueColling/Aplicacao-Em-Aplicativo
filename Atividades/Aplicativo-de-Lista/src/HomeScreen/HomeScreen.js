@@ -103,7 +103,7 @@ function Home({ navigation }) {
   return (
     // Renderiza a tela inicial da aplicação.
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      
+
       {/* Exibe um título na tela, indicando que é a Home Screen. */}
       <Text style={styles.texto}>Home Screen</Text>
 
@@ -121,7 +121,7 @@ function Home({ navigation }) {
 
       {/* Mapeia e renderiza as listas existentes na interface. */}
       {lists.map((list) => (
-        <View key={list.id} style={{ flexDirection: "row", alignItems: "center" }}>
+        <View style={styles.editarView} key={list.id}>
 
           {/* Verifica se uma lista está sendo editada. */}
           {listToEdit === list.id ? (
@@ -137,7 +137,7 @@ function Home({ navigation }) {
               <Button title="Save" onPress={() => saveEditedList(list.id, editedListName)} />
             </View>
           ) : (
-            <TouchableOpacity style={styles.editarNameList} onPress={() => ItemList(list.id)}>
+            <TouchableOpacity style={styles.editarList} onPress={() => ItemList(list.id)}>
 
               {/* Exibe o nome da lista como um link clicável para acessar a lista de itens. */}
               <Text style={styles.editarNameList}>{list.name}</Text>
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     marginTop: 20,
     marginRight: 16,
-    backgroundColor: "#453831",
+    backgroundColor: "#225A76",
     paddingLeft: 15,
     paddingRight: 15,
     paddingTop: 5,
@@ -191,9 +191,29 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 
-  listaNome: {
+  editarNameList: {
     fontSize: 20,
+  },
+
+  editarView: {
+    flexDirection: "row",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  editarList: {
     marginTop: 20,
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    backgroundColor: "#87C4FF",
+    borderRadius: 10,
+    width: 200,
+    display: "flex",
+    alignItems: "center",
+    alignContent: "flex-start",
   }
 });
 

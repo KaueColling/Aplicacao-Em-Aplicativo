@@ -139,9 +139,11 @@ function ItemScreenList({ navigation, route }) {
 
             </View>
           ) : (
-            // Se o item não estiver sendo editado, exibe o nome do item.
+            <View style={styles.editarItem}>
+            {/* Se o item não estiver sendo editado, exibe o nome do item. */}
             <Text style={styles.editarNameItem}>{item.name}</Text>
-          )}
+            </View>
+         )}
 
           {/* Botão "Edit" que permite editar o nome do item. */}
           <TouchableOpacity style={styles.editarBotao} onPress={() => editItem(item.id)}>
@@ -159,6 +161,54 @@ function ItemScreenList({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+    editarBotao: {
+        marginLeft: 16,
+        marginTop: 20,
+        marginRight: 16,
+        backgroundColor: "#225A76",
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingTop: 5,
+        paddingBottom: 5,
+        borderRadius: 10,
+      },
+    
+      excluirBotao: {
+        marginTop: 20,
+        backgroundColor: "#BB0000",
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingTop: 5,
+        paddingBottom: 5,
+        borderRadius: 10,
+      },
+    
+      textoBotao: {
+        fontSize: 20,
+        color: "#fffafa",
+      },
+    
+      texto: {
+        fontSize: 20,
+      },
+    
+      editarNameItem: {
+        fontSize: 20,
+      },
+
+      editarItem: {
+        marginTop: 20,
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingTop: 5,
+        paddingBottom: 5,
+        backgroundColor: "#A7E7F6",
+        borderRadius: 10,
+        width: 200,
+        display: "flex",
+        alignItems: "center",
+        alignContent: "flex-start",
+      }
 });
 
 export default ItemScreenList;
