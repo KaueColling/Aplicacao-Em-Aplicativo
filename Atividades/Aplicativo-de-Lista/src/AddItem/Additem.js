@@ -1,6 +1,6 @@
 // Importa as bibliotecas necessárias do React e React Native.
 import React, { useState } from "react";
-import { View, Text, Button, TextInput } from "react-native";
+import { StyleSheet, View, Text, Button, TextInput, TouchableOpacity } from "react-native";
 
 /**
  * Componente "AddItem" utilizado para adicionar um novo item a uma lista.
@@ -35,20 +35,47 @@ function AddItem({ route, navigation }) {
   // Renderiza a interface da tela.
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Item Screen</Text>
-      
+      <Text style={styles.texto}>Item Screen</Text>
+
       {/* Campo de entrada para o nome do novo item */}
       <TextInput
+        style={styles.texto}
         placeholder="Nome do Item"
         value={newItemName}
         onChangeText={(text) => setNewItemName(text)}
       />
 
       {/* Botão para adicionar o item */}
-      <Button title="Adicionar Item" onPress={addItem} />
+      <TouchableOpacity style={styles.AddItem} onPress={addItem}>
+        <Text style={styles.textoBotao}>Add Item</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  texto: {
+    fontSize: 25,
+    margin: 5,
+  },
+
+  AddItem: {
+    marginLeft: 16,
+    marginTop: 20,
+    marginRight: 16,
+    backgroundColor: "#225A76",
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderRadius: 10,
+  },
+
+  textoBotao: {
+    fontSize: 25,
+    color: "#fffafa",
+  },
+});
 
 // Exporta o componente "AddItem" para uso em outras partes da aplicação.
 export default AddItem;

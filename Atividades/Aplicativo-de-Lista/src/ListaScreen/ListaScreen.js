@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Button, TextInput } from "react-native";
+import { View, Text, Button, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 
 // Componente ListaScreen
 function AddList({ route, navigation }) {
@@ -24,20 +24,47 @@ function AddList({ route, navigation }) {
   // Renderização da tela
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Lista Screen</Text>
+      <Text style={styles.texto}>Lista Screen</Text>
 
       {/* Input de texto para inserir o nome da nova lista */}
       <TextInput
+        style={styles.texto}
         placeholder="Nome da Lista"
         value={newListName}
         onChangeText={(text) => setNewListName(text)}
       />
 
       {/* Botão para adicionar a nova lista */}
-      <Button title="Adicionar Lista" onPress={addList} />
+      <TouchableOpacity style={styles.AddItem} onPress={addList}>
+        <Text style={styles.textoBotao}>Add List</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  texto: {
+    fontSize: 25,
+    margin: 5,
+  },
+
+  AddItem: {
+    marginLeft: 16,
+    marginTop: 20,
+    marginRight: 16,
+    backgroundColor: "#225A76",
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderRadius: 10,
+  },
+
+  textoBotao: {
+    fontSize: 25,
+    color: "#fffafa",
+  },
+});
 
 // Exporta o componente ListaScreen para ser usado em outras partes do aplicativo
 export default AddList;

@@ -8,10 +8,10 @@ function ItemScreenList({ navigation, route }) {
 
   // Estado para armazenar os itens da lista
   const [items, setItems] = useState([]);
-  
+
   // Estado para controlar a edição de um item
   const [itemToEdit, setItemToEdit] = useState(null);
-  
+
   // Estado para armazenar o nome editado do item
   const [editedItemName, setEditedItemName] = useState("");
 
@@ -111,14 +111,14 @@ function ItemScreenList({ navigation, route }) {
       <Text style={styles.texto}>Item List {list.name}</Text>
 
       {/* Botão "Add Item" que, quando pressionado, navegará para a tela "AddItem". */}
-      <Button
-        title="Add Item"
-        onPress={() => {
-          navigation.navigate("AddItem", {
-            onAddItem: addItem,
-          });
-        }}
-      />
+      <TouchableOpacity style={styles.editarBotao} 
+      onPress={() => {
+        navigation.navigate("AddItem", {
+          onAddItem: addItem,
+        });
+      }}>
+        <Text style={styles.textoBotao}>Add Item</Text>
+      </TouchableOpacity>
 
       {/* Mapeia a lista de itens (items) e renderiza cada item na lista. */}
       {items.map((item) => (
@@ -140,10 +140,10 @@ function ItemScreenList({ navigation, route }) {
             </View>
           ) : (
             <View style={styles.editarItem}>
-            {/* Se o item não estiver sendo editado, exibe o nome do item. */}
-            <Text style={styles.editarNameItem}>{item.name}</Text>
+              {/* Se o item não estiver sendo editado, exibe o nome do item. */}
+              <Text style={styles.editarNameItem}>{item.name}</Text>
             </View>
-         )}
+          )}
 
           {/* Botão "Edit" que permite editar o nome do item. */}
           <TouchableOpacity style={styles.editarBotao} onPress={() => editItem(item.id)}>
@@ -161,54 +161,54 @@ function ItemScreenList({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-    editarBotao: {
-        marginLeft: 16,
-        marginTop: 20,
-        marginRight: 16,
-        backgroundColor: "#225A76",
-        paddingLeft: 15,
-        paddingRight: 15,
-        paddingTop: 5,
-        paddingBottom: 5,
-        borderRadius: 10,
-      },
-    
-      excluirBotao: {
-        marginTop: 20,
-        backgroundColor: "#BB0000",
-        paddingLeft: 15,
-        paddingRight: 15,
-        paddingTop: 5,
-        paddingBottom: 5,
-        borderRadius: 10,
-      },
-    
-      textoBotao: {
-        fontSize: 20,
-        color: "#fffafa",
-      },
-    
-      texto: {
-        fontSize: 20,
-      },
-    
-      editarNameItem: {
-        fontSize: 20,
-      },
+  editarBotao: {
+    marginLeft: 16,
+    marginTop: 20,
+    marginRight: 16,
+    backgroundColor: "#225A76",
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderRadius: 10,
+  },
 
-      editarItem: {
-        marginTop: 20,
-        paddingLeft: 15,
-        paddingRight: 15,
-        paddingTop: 5,
-        paddingBottom: 5,
-        backgroundColor: "#A7E7F6",
-        borderRadius: 10,
-        width: 200,
-        display: "flex",
-        alignItems: "center",
-        alignContent: "flex-start",
-      }
+  excluirBotao: {
+    marginTop: 20,
+    backgroundColor: "#BB0000",
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderRadius: 10,
+  },
+
+  textoBotao: {
+    fontSize: 20,
+    color: "#fffafa",
+  },
+
+  texto: {
+    fontSize: 30,
+  },
+
+  editarNameItem: {
+    fontSize: 20,
+  },
+
+  editarItem: {
+    marginTop: 20,
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    backgroundColor: "#A7E7F6",
+    borderRadius: 10,
+    width: 200,
+    display: "flex",
+    alignItems: "center",
+    alignContent: "flex-start",
+  }
 });
 
 export default ItemScreenList;

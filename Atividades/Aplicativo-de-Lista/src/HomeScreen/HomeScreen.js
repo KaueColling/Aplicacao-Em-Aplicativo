@@ -108,16 +108,16 @@ function Home({ navigation }) {
       <Text style={styles.texto}>Home Screen</Text>
 
       {/* Renderiza um botão "Add List" que permite a navegação para a tela de adição de lista. */}
-      <Button
-        title="Add List"
+      <TouchableOpacity style={styles.editarBotao}
         onPress={() => {
 
           // Navega para a tela "AddList" passando a função para adicionar lista.
           navigation.navigate("AddList", {
             onAddList: addList, // Função para adicionar uma nova lista.
           });
-        }}
-      />
+        }}>
+        <Text style={styles.textoBotao}>Add Item</Text>
+      </TouchableOpacity>
 
       {/* Mapeia e renderiza as listas existentes na interface. */}
       {lists.map((list) => (
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   },
 
   texto: {
-    fontSize: 20,
+    fontSize: 30,
   },
 
   editarNameList: {
