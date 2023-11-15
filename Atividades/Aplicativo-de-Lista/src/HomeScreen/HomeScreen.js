@@ -7,7 +7,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // O componente Home representa a tela inicial da aplicação.
 function Home({ navigation }) {
   // Define estados para armazenar informações e interações do usuário.
-  const [list, setList] = useState([]); // Estado não utilizado
   const [lists, setLists] = useState([]); // Estado que armazena a lista de listas
   const [listToEdit, setListToEdit] = useState(null); // Estado para indicar a lista sendo editada
   const [editedListName, setEditedListName] = useState(""); // Estado para armazenar o nome editado da lista
