@@ -1,47 +1,57 @@
+// Importa os módulos necessários do React Native e outras bibliotecas.
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Button, TouchableOpacity, TextInput } from "react-native";
+import { format } from 'date-fns';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // O componente Home representa a tela inicial da aplicação.
 function Home({ navigation }) {
   // Define estados para armazenar informações e interações do usuário.
-  const [list, setList] = useState([]);
-  const [lists, setLists] = useState([]);
-  const [listToEdit, setListToEdit] = useState(null);
-  const [editedListName, setEditedListName] = useState("");
+  const [list, setList] = useState([]); // Estado não utilizado
+  const [lists, setLists] = useState([]); // Estado que armazena a lista de listas
+  const [listToEdit, setListToEdit] = useState(null); // Estado para indicar a lista sendo editada
+  const [editedListName, setEditedListName] = useState(""); // Estado para armazenar o nome editado da lista
 
   // Efeito colateral para carregar as listas armazenadas no AsyncStorage durante a inicialização.
   useEffect(() => {
-    async function loadLists() {
+    const loadLists = async () => {
       try {
         // Tenta recuperar as listas salvas no AsyncStorage com a chave "lists".
         const savedLists = await AsyncStorage.getItem("lists");
         if (savedLists) {
           // Se as listas forem encontradas, elas são analisadas e definidas como estado.
           const parsedLists = JSON.parse(savedLists);
-          setLists(parsedLists);
+          const validatedLists = parsedLists.map((list) => ({
+            ...list,
+            createdAt: new Date(list.createdAt),
+          }));
+          setLists(validatedLists);
         }
       } catch (error) {
         console.error("Error loading lists: ", error);
       }
-    }
+    };
 
     // Chama a função para carregar listas durante a inicialização.
     loadLists();
   }, []);
 
   // Função para adicionar uma nova lista.
-  const addList = (newListName) => {
+  const addList = async (newListName) => {
     if (newListName) {
-      // Cria uma nova lista com um ID único com base na data atual.
-      const newList = { id: Date.now(), name: newListName };
+      // Cria uma nova lista com um ID único com base no timestamp atual.
+      const newDateTime = new Date();
+      const newList = {
+        id: Date.now(),
+        name: newListName,
+        createdAt: newDateTime.getTime(), // Converte para um timestamp
+      };
+
       // Atualiza o estado das listas incluindo a nova lista.
       const updatedLists = [...lists, newList];
       setLists(updatedLists);
-      // Salva as listas atualizadas no AsyncStorage.
-      saveListsToStorage(updatedLists);
     }
-  }
+  };
 
   // Função para editar uma lista.
   const editList = (id) => {
@@ -53,11 +63,11 @@ function Home({ navigation }) {
     });
   };
 
-  // Função para navegar para a tela "ItemScreenList" passando informações relevantes.
+  // Função para navegar para a tela "ItemList" passando informações relevantes.
   const ItemList = (id) => {
     navigation.navigate("ItemList", {
       listId: id,
-      list: list, // Passa a lista como um parâmetro.
+      list: list, // Passa a lista como um parâmetro (Não utilizado nesta versão).
       onEditList: saveEditedList,
     });
   };
@@ -69,10 +79,17 @@ function Home({ navigation }) {
       const updatedLists = lists.map((list) =>
         list.id === listId ? { ...list, name: newName } : list
       );
+
       // Atualiza o estado com as listas editadas.
       setLists(updatedLists);
-      // Salva as listas atualizadas no AsyncStorage.
-      saveListsToStorage(updatedLists);
+
+      try {
+        // Salva as listas atualizadas no AsyncStorage.
+        saveListsToStorage(updatedLists);
+      } catch (error) {
+        console.error("Error saving lists: ", error);
+      }
+
       // Limpa a lista sendo editada e o nome editado da lista.
       setListToEdit(null);
       setEditedListName("");
@@ -83,17 +100,23 @@ function Home({ navigation }) {
   const deleteList = (id) => {
     // Filtra a lista a ser excluída da lista de listas.
     const updatedLists = lists.filter((list) => list.id !== id);
+
     // Atualiza o estado com a lista excluída.
     setLists(updatedLists);
-    // Salva as listas atualizadas no AsyncStorage.
-    saveListsToStorage(updatedLists);
+
+    try {
+      // Salva as listas atualizadas no AsyncStorage.
+      saveListsToStorage(updatedLists);
+    } catch (error) {
+      console.error("Error saving lists: ", error);
+    }
   };
 
   // Função para salvar as listas no AsyncStorage.
   const saveListsToStorage = async (listsToSave) => {
     try {
       // Converte e salva as listas em formato JSON no AsyncStorage com a chave "lists".
-      await AsyncStorage.setItem("lists", JSON.stringify(listsToSave))
+      await AsyncStorage.setItem("lists", JSON.stringify(listsToSave));
     } catch (error) {
       console.error("Error saving lists: ", error);
     }
@@ -138,9 +161,9 @@ function Home({ navigation }) {
             </View>
           ) : (
             <TouchableOpacity style={styles.editarList} onPress={() => ItemList(list.id)}>
-
               {/* Exibe o nome da lista como um link clicável para acessar a lista de itens. */}
               <Text style={styles.editarNameList}>{list.name}</Text>
+              <Text>{format(list.createdAt, 'dd/MM/yyyy HH:mm:ss')}</Text>
             </TouchableOpacity>
           )}
 
@@ -159,6 +182,7 @@ function Home({ navigation }) {
   );
 }
 
+// Estilos CSS para a tela HomeScreen.
 const styles = StyleSheet.create({
   editarBotao: {
     marginLeft: 16,
@@ -217,4 +241,5 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Home; // Exporta o componente HomeScreen para uso em outras partes da aplicação.
+// Exporta o componente HomeScreen para uso em outras partes da aplicação.
+export default Home;
