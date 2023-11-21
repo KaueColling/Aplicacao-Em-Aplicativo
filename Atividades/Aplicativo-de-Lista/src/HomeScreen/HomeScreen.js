@@ -66,7 +66,7 @@ function Home({ navigation }) {
   const ItemList = (id) => {
     navigation.navigate("ItemList", {
       listId: id,
-      list: list, // Passa a lista como um parâmetro (Não utilizado nesta versão).
+      list: lists, // Passa a lista como um parâmetro (Não utilizado nesta versão).
       onEditList: saveEditedList,
     });
   };
