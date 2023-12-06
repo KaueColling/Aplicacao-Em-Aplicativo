@@ -1,12 +1,10 @@
-
-// service-worker.js
-
 const CACHE_NAME = 'nome-do-cache';
 const urlsToCache = [
     '/',
     '/index.html',
     '/styles.css', // Substitua pelo seu arquivo de estilos
     '/service-worker.js',  // Substitua pelo seu arquivo de scripts
+    '/manifest.json',
 ];
 
 self.addEventListener('install', event => {
