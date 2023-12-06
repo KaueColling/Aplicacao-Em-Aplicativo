@@ -3,8 +3,8 @@
   "shortname": "PWA",
   "start_url": "/Aplicacao-Em-Aplicativo/PWA/index.html",
   "display": "standalone",
-  "theme_color": "#3367D6",
-  "background_color": "#00000",
+  "theme_color": "#453831",
+  "background_color": "#453831",
   "icons": [
       {
           "src": "/Aplicacao-Em-Aplicativo/PWA/icon/icon.png",
