@@ -1,9 +1,15 @@
 {
-    "name": "Meu Aplicativo PWA",
-    "short_name": "PWA",
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#000000"
-  }
-  
+  "name": "PWA",
+  "shortname": "PWA",
+  "start_url": "/Aplicacao-Em-Aplicativo/PWA/index.html",
+  "display": "standalone",
+  "theme_color": "#3367D6",
+  "background_color": "#00000",
+  "icons": [
+      {
+          "src": "/Aplicacao-Em-Aplicativo/PWA/icon/icon.png",
+          "type": "image/png",
+          "sizes": "512x512"
+      }
+  ]
+}

@@ -4,7 +4,7 @@ const urlsToCache = [
     '/index.html',
     '/styles.css', // Substitua pelo seu arquivo de estilos
     '/service-worker.js',  // Substitua pelo seu arquivo de scripts
-    '/manifest.json',
+    '/manifest.json'
 ];
 
 self.addEventListener('install', event => {
@@ -12,12 +12,16 @@ self.addEventListener('install', event => {
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log('Cache aberto');
-        return cache.addAll(urlsToCache)
-          .catch(error => {
-            console.error('Falha ao adicionar recursos ao cache:', error);
-            // Realize um log do URL específico que causou o erro
-            console.log('URL do recurso com falha:', error.url);
-          });
+        const cachePromises = urlsToCache.map(url => {
+          return cache.add(url)
+            .catch(error => {
+              console.error(`Falha ao adicionar ${url} ao cache:`, error);
+              // Realize um log do URL específico que causou o erro
+              console.log('URL do recurso com falha:', url);
+            });
+        });
+
+        return Promise.all(cachePromises);
       })
   );
 });
